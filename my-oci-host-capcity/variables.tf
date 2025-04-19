@@ -14,7 +14,7 @@ variable "fingerprint" {
 }
 
 variable "private_key_path" {
-  description = "The path to the private key file"
+  description = "The path to the private API key file"
   type        = string
 }
 

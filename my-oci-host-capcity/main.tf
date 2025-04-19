@@ -18,6 +18,7 @@ resource "oci_core_instance" "arm_instance" {
 
   create_vnic_details {
     subnet_id = var.subnet_id
+    assign_public_ip = true
   }
 
   source_details {
