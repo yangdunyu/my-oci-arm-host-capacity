@@ -53,4 +53,4 @@ while true; do
     fi
 done
 
-echo "Terraform configuration applied successfully!"
+echo "ARM instance created successfully!"
