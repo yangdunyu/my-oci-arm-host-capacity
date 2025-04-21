@@ -6,7 +6,6 @@ private_key_path    = "/path/to/your/private_key.pem"
 region              = "us-ashburn-1"
 
 # --- Instance Configuration ---
-availability_domain = "Uocm:PHX-AD-1"
 subnet_id           = "ocid1.subnet.oc1..exampleuniqueID"
 source_id           = "ocid1.image.oc1..exampleuniqueID"
 ocups               = 2
