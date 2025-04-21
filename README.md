@@ -2,9 +2,13 @@
 
 This repository contains Terraform configurations and scripts to automate the provisioning of ARM-based instances on Oracle Cloud Infrastructure (OCI).
 
-## Motivation
+> **Notice**: While this script remains fully functional, many users now recommend upgrading to Pay As You Go (PAYG) for the best experience. With PAYG, you'll continue to enjoy all the free benefits without any additional cost, but you'll also receive priority for launching instances and are less likely to face "Out of host capacity" errors. Additionally, PAYG unlocks more types of OCI resources, including free Kubernetes-related infrastructure. It's important to set up budget alerts as a safety net and be mindful of the resources you deploy and their associated costs. This way, you can take full advantage of PAYG while keeping your spending in check.
 
-Oracle Cloud Infrastructure (OCI) offers Always Free ARM architecture instances, but these resources are extremely scarce and difficult to secure for free tier users. This project was created to solve this problem by:
+## About This Project
+
+Oracle Cloud Infrastructure (OCI) offers a very useful ARM configuration as part of its Always Free tier. Each tenancy gets the first 3,000 OCPU hours and 18,000 GB hours per month for free to create Ampere A1 Compute instances using the VM.Standard.A1.Flex shape (equivalent to 4 OCPUs and 24 GB of memory).
+
+However, these resources are extremely scarce and difficult to secure for free tier users due to the frequent "Out of Capacity" error. This project was created to solve this problem by:
 
 - Automatically monitoring for available ARM capacity on OCI
 - Implementing intelligent retry mechanisms when facing "out of capacity" errors
@@ -18,7 +22,6 @@ With this tool, you can let the script run in the background and automatically p
 
 This project uses Terraform, HashiCorp's infrastructure as code (IaC) tool that allows the definition of resources and infrastructure in human-readable configuration files. Terraform enables the safe building, changing, and versioning of cloud infrastructure. It automates the provisioning process by codifying cloud APIs into declarative configuration files, allowing for consistent deployment and easy tracking of infrastructure changes.
 
-
 ## How to Use
 
 The overall process is simple and consists of just three steps:
@@ -31,7 +34,7 @@ The overall process is simple and consists of just three steps:
 
 2. Configure the `terraform.tfvars` file with your OCI credentials and instance settings (detailed below)
 
-3. Enter the project folder and Run the provisioning script:
+3. Run the provisioning script:
    ```bash
    bash run_terraform.sh
    ```
@@ -53,19 +56,19 @@ From the process below, you'll obtain these values for your `.tfvars` file:
 
 1. Log in to the [OCI Console](https://cloud.oracle.com)
 
-2.After logging in to OCI Console, click profile icon and then "User Settings"
+2. After logging in to OCI Console, click profile icon and then "User Settings"
 
 [User Settings.jpg]
 
-3.Go to Resources -> API keys, click "Add API Key" button
+3. Go to Resources -> API keys, click "Add API Key" button
 
 [Add API Key.jpg]
 
-4.Make sure "Generate API Key Pair" radio button is selected, click "Download Private Key" and then "Add".
+4. Make sure "Generate API Key Pair" radio button is selected, click "Download Private Key" and then "Add".
 
 [Download Private Key.jpg]
 
-5.Copy the contents from textarea and extract corresponding value and save  to .tfvars file with same key name. save private key file(*.pem file) to the directory of the host that you want execute the script via SFTP or other method. I put  *.pem file in newly created directory /home/ubuntu/.oci
+5. Copy the contents from textarea and extract corresponding value and save to .tfvars file with same key name. Save private key file (*.pem file) to the directory of the host that you want execute the script via SFTP or other method. For example, put the *.pem file in a newly created directory /home/ubuntu/.oci
 
 ### Step 2: Gather Instance Configuration Details
 
@@ -76,46 +79,59 @@ Go through the instance creation process in the OCI web console (without actuall
 - `ocups`: Number of OCPUs for your ARM instance (typically 2-4 for free tier)
 - `memory_in_gbs`: RAM amount in GB (typically 12-24 for free tier)
 - `boot_volume_size_in_gbs`: Boot volume size in GB (minimum 50)
-- `ssh_authorized_keys`: Your public SSH key content for accessing the instance,reminder its the content instead of the path to .pub file
+- `ssh_authorized_keys`: Your public SSH key content for accessing the instance (note: this is the content of the key, not the path to .pub file)
 
-You must start instance creation process from the OCI Console in the browser (Menu -> Compute -> Instances -> Create Instance)
+Follow these steps:
 
-Change image and shape. For Always free ARM - make sure that "Always Free Eligible" availabilityDomain label is there:
+1. Start instance creation process from the OCI Console in the browser (Menu -> Compute -> Instances -> Create Instance)
+
+2. Change image and shape. For Always free ARM - make sure that "Always Free Eligible" availabilityDomain label is there:
 
 [Changing image and shape.jpg]
 
-ARMs can be created anywhere within your home region.
+3. Note that ARMs can be created anywhere within your home region.
 
-Adjust Networking section, set "Do not assign a public IPv4 address" checkbox. If you don't have existing VNIC/subnet, please create a instance with subnet before doing everything.
+4. Adjust Networking section, set "Do not assign a public IPv4 address" checkbox. If you don't have existing VNIC/subnet, please create an instance with subnet before doing everything.
 
 [Networking.jpg]
 
-"Add SSH keys" section does not matter for us right now. Before clicking "Create"…
+5. The "Add SSH keys" section does not matter for us right now. Before clicking "Create"...
 
 [Add SSH Keys.jpg]
 
-…open browser's dev tools -> network tab. Click "Create" and wait a bit most probably you'll get "Out of capacity" error. Now find /instances API call (red one)…
+6. Open browser's dev tools -> network tab. Click "Create" and wait a bit. Most probably you'll get "Out of capacity" error. Now find /instances API call (red one)...
 
 [Dev Tools.jpg]
 
-…and right click on it -> copy as curl. Paste the clipboard contents in any text editor and review the data-binary parameter. Find subnet_id, image_id(as source_id) respectively.
+7. Right click on it -> copy as curl. Paste the clipboard contents in any text editor and review the data-binary parameter. Find subnet_id, image_id (as source_id) respectively.
 
-ssh_authorized_keys (SSH access)
-In order to have secure shell (SSH) access to the instance you need to have a keypair, besically 2 files:
+#### SSH Key Configuration
 
-~/.ssh/id_rsa
-~/.ssh/id_rsa.pub
-Second one (public key) contents (string) should be provided to a command below. The are plenty of tutorials on how to generate them (if you don't have them yet), we won't cover this part here.
+In order to have secure shell (SSH) access to the instance you need to have a keypair, basically 2 files:
+- `~/.ssh/id_rsa`
+- `~/.ssh/id_rsa.pub`
 
+The public key contents (string) should be provided in the terraform.tfvars file. There are plenty of tutorials on how to generate SSH keys if you don't have them yet.
+
+To view your public key:
+```bash
 cat ~/.ssh/id_rsa.pub
-Output should be similar to
+```
 
+The output should be similar to:
+```
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFwZVQa+F41Jrb4X+p9gFMrrcAqh9ks8ATrcGRitK+R/ github.com@dunyu.com
-Change `ssh_authorized_keys` inside double quotes - paste the contents above (or you won't be able to login into the newly created instance). NiuBi! No new lines allowed!
+```
 
-`ocpus` and `memory_in_gbs` are set 4 and 24 by default. Of course, you can safely adjust them. Possible values are 1/6, 2/12, 3/18 and 4/24, respectively. Please notice that "Oracle Linux Cloud Developer" image can be created with at least 8GB of RAM (memory_in_gbs).
+Set the `ssh_authorized_keys` value in your terraform.tfvars file to this string (or you won't be able to login into the newly created instance). No new lines allowed!
 
-If for some reason your home region is running out of Always free ARM (total 4 OPCU + 24GB RAM), script will report error and exit
+#### Resource Configuration
+
+- `ocpus` and `memory_in_gbs` are set to 4 and 24 by default. You can safely adjust them.
+- Possible values are 1/6, 2/12, 3/18 and 4/24, respectively.
+- Note that the "Oracle Linux Cloud Developer" image can be created with at least 8GB of RAM (memory_in_gbs).
+
+If for some reason your home region is running out of Always Free ARM capacity (total 4 OCPU + 24GB RAM), the script will report an error and exit.
 
 
 
