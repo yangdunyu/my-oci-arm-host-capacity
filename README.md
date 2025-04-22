@@ -18,7 +18,7 @@ With this tool, you can let the script run in the background and automatically p
 
 ## Tech Stack
 
-<img src="https://www.terraform.io/img/logo-terraform-main.svg" alt="Terraform Logo" width="150"/>
+![Terraform Logo](images/terraform.png)
 
 This project uses Terraform, HashiCorp's infrastructure as code (IaC) tool that allows the definition of resources and infrastructure in human-readable configuration files. Terraform enables the safe building, changing, and versioning of cloud infrastructure. It automates the provisioning process by codifying cloud APIs into declarative configuration files, allowing for consistent deployment and easy tracking of infrastructure changes.
 
