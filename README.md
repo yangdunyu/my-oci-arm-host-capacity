@@ -80,6 +80,7 @@ From the process below, you'll obtain these values for your `.tfvars` file:
 
 Go through the instance creation process in the OCI web console (without actually creating it) to gather these parameters:
 
+- `availability_domain`: The availability domain where your instance will be created (e.g., "legQ:CA-TORONTO-1-AD-1")
 - `subnet_id`: OCID of the subnet where your instance will be created (found in Networking → Virtual Cloud Networks → [Your VCN] → Subnets)
 - `source_id`: OCID of the OS image (found in Compute → Instances → Create Instance → Image)
 - `ocups`: Number of OCPUs for your ARM instance (typically 2-4 for free tier)

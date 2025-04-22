@@ -28,11 +28,6 @@ variable "availability_domain" {
   type        = string
 }
 
-variable "compartment_id" {
-  description = "The OCID of the compartment where resources will be created. The OCID of the Root Compartment is your Tenancy OCID."
-  type        = string
-}
-
 variable "ocups" {
   description = "The number of OCPUs for the instance"
   type        = number
