@@ -1,4 +1,4 @@
-# OCI ARM Host Capacity Provisioning
+# Resolving Oracle Cloud "Out of Capacity" issue
 
 This repository contains Terraform configurations and scripts to automate the provisioning of ARM-based instances on Oracle Cloud Infrastructure (OCI).
 
@@ -6,7 +6,7 @@ This repository contains Terraform configurations and scripts to automate the pr
 
 ## About This Project
 
-Oracle Cloud Infrastructure (OCI) offers a very useful ARM configuration as part of its Always Free tier. Each tenancy gets the first 3,000 OCPU hours and 18,000 GB hours per month for free to create Ampere A1 Compute instances using the VM.Standard.A1.Flex shape (equivalent to 4 OCPUs and 24 GB of memory).
+Oracle Cloud Infrastructure (OCI) offers a very useful ARM configuration as part of its Always Free tier accoring to its [announcement](https://blogs.oracle.com/cloud-infrastructure/post/moving-to-ampere-a1-compute-instances-on-oracle-cloud-infrastructure-oci). Each tenancy gets the first 3,000 OCPU hours and 18,000 GB hours per month for free to create Ampere A1 Compute instances using the VM.Standard.A1.Flex shape (equivalent to 4 OCPUs and 24 GB of memory).
 
 However, these resources are extremely scarce and difficult to secure for free tier users due to the frequent "Out of Capacity" error. This project was created to solve this problem by:
 
@@ -47,6 +47,8 @@ The most important part is configuring the variables in `terraform.tfvars`. Foll
 
 ### Step 1: Generate OCI API Keys
 
+API keys are credentials that allow you to interact with the OCI API. These keys grant programmatic access to your OCI resources, enabling automation tools like Terraform to create and manage infrastructure on your behalf. You'll need to generate these keys to authenticate your requests to the OCI API.
+
 From the process below, you'll obtain these values for your `.tfvars` file:
 - `tenancy_ocid`: Your tenancy OCID 
 - `user_ocid`: Your user OCID
@@ -58,17 +60,19 @@ From the process below, you'll obtain these values for your `.tfvars` file:
 
 2. After logging in to OCI Console, click profile icon and then "User Settings"
 
-[User Settings.jpg]
+![User Settings](images/user-settings.png)
 
 3. Go to Resources -> API keys, click "Add API Key" button
 
-[Add API Key.jpg]
+![Add API Key](images/add-api-key.png)
 
 4. Make sure "Generate API Key Pair" radio button is selected, click "Download Private Key" and then "Add".
 
-[Download Private Key.jpg]
+![Download Private Key](images/download-private-key.png)
 
 5. Copy the contents from textarea and extract corresponding value and save to .tfvars file with same key name. Save private key file (*.pem file) to the directory of the host that you want execute the script via SFTP or other method. For example, put the *.pem file in a newly created directory /home/ubuntu/.oci
+
+![Config File Preview](images/config-file-preview.png)
 
 ### Step 2: Gather Instance Configuration Details
 
@@ -87,21 +91,21 @@ Follow these steps:
 
 2. Change image and shape. For Always free ARM - make sure that "Always Free Eligible" availabilityDomain label is there:
 
-[Changing image and shape.jpg]
+![Create Compute Instance](images/create-compute-instance.png)
 
 3. Note that ARMs can be created anywhere within your home region.
 
 4. Adjust Networking section, set "Do not assign a public IPv4 address" checkbox. If you don't have existing VNIC/subnet, please create an instance with subnet before doing everything.
 
-[Networking.jpg]
+![Networking](images/networking.png)
 
 5. The "Add SSH keys" section does not matter for us right now. Before clicking "Create"...
 
-[Add SSH Keys.jpg]
+![Add SSH Keys](images/add-ssh-keys.png)
 
 6. Open browser's dev tools -> network tab. Click "Create" and wait a bit. Most probably you'll get "Out of capacity" error. Now find /instances API call (red one)...
 
-[Dev Tools.jpg]
+![Dev Tools](images/dev-tools.png)
 
 7. Right click on it -> copy as curl. Paste the clipboard contents in any text editor and review the data-binary parameter. Find subnet_id, image_id (as source_id) respectively.
 
