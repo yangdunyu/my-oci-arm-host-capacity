@@ -23,7 +23,7 @@ With this tool, you can let the script run in the background and automatically p
   <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Python-Light.svg" alt="Python Logo" width="120"/>
 </p>
 
-This project utilizes **Terraform**, HashiCorp's infrastructure as code (IaC) tool, along with a **backoff** algorithm to automate the provisioning of ARM instances. Additionally, it includes a **Python** script that implements command-line interactions, flow control, and exception handling to facilitate cross-platform (Windows, Ubuntu) operations.
+This project leverages **Terraform**, HashiCorp's infrastructure as code (IaC) tool, and a **backoff algorithm** to automate the provisioning of ARM instances. The advantage of this method is that it utilizes Terraform's `plan` feature before applying changes, eliminating the need to call additional APIs to check boundary conditions, such as exceeding OCPU or memory limits. The **Python** script is the primary control mechanism, handling command-line interactions, flow control, and exception handling to ensure smooth cross-platform (Windows, Ubuntu) operations.
 
 ## How to Use
 
