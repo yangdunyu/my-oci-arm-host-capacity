@@ -19,16 +19,17 @@ With this tool, you can let the script run in the background and automatically p
 ## Tech Stack
 
 <p align="center">
-  <img src="images/terraform.png" alt="Terraform Logo" width="100"/>
+  <img src="https://github.com/tandpfun/skill-icons/raw/main/icons/Terraform-Dark.svg" alt="Terraform Logo" width="120" style="margin-right: 20px;"/>
+  <img src="https://github.com/tandpfun/skill-icons/raw/main/icons/Python-Dark.svg" alt="Python Logo" width="120"/>
 </p>
 
-This project uses **Terraform**, HashiCorp's infrastructure as code (IaC) tool that allows the definition of resources and infrastructure in human-readable configuration files. Terraform enables the safe building, changing, and versioning of cloud infrastructure. It automates the provisioning process by codifying cloud APIs into declarative configuration files, allowing for consistent deployment and easy tracking of infrastructure changes.
+This project utilizes **Terraform**, HashiCorp's infrastructure as code (IaC) tool, along with a backoff algorithm to automate the provisioning of ARM instances. Additionally, it includes a Python script that implements command-line interactions, flow control, and exception handling to facilitate cross-platform (Windows, Ubuntu) operations.
 
 ## How to Use
 
 The overall process is simple and consists of just three steps:
 
-1. Clone this repository to your Ubuntu machine:
+1. Clone this repository to your machine:
    ```bash
    git clone https://github.com/yourusername/my-oci-arm-host-capacity.git
    cd my-oci-host-capcity
@@ -38,7 +39,7 @@ The overall process is simple and consists of just three steps:
 
 3. Run the provisioning script:
    ```bash
-   bash run_terraform.sh
+   python run_terraform.py
    ```
 
 ## Configuration Guide
