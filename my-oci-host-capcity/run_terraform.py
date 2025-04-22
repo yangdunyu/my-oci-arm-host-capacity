@@ -58,17 +58,9 @@ def main():
             download_and_install_terraform_windows()
     elif system == "Linux":
         # Check if it is Ubuntu
-        distro = platform.linux_distribution()[0]
-        if "Ubuntu" in distro:
-            stdout, stderr, returncode = run_command("terraform version")
-            if "Terraform v" not in stdout:
-                install_terraform_ubuntu()
-        else:
-            print("Unsupported Linux distribution")
-            sys.exit(1)
-    else:
-        print("Unsupported operating system")
-        sys.exit(1)
+        stdout, stderr, returncode = run_command("terraform version")
+        if "Terraform v" not in stdout:
+            install_terraform_ubuntu()
 
     # Check if Terraform is correctly installed
     stdout, stderr, returncode = run_command("terraform.exe version")
