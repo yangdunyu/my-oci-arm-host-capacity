@@ -141,6 +141,8 @@ Set the `ssh_authorized_keys` value in your terraform.tfvars file to this string
 
 If for some reason your home region is running out of Always Free ARM capacity (total 4 OCPU + 24GB RAM), the script will report an error and exit.
 
+## Test Outcome
+The Python script performs efficiently on **Windows 10 and later versions**, as well as on **Ubuntu 20.04 and newer**. It is compatible with **Terraform version 1.11.4** and **OCI Provider version 6.35.0**.
 
 
 
