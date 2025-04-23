@@ -109,15 +109,16 @@ def main():
             logging.info("\n✓ Resource creation successful!")
             initial_wait = 1  # Reset wait time
         else:
-            logging.error(stderr)
             if "Error: 500-InternalError" in stdout or "capacity" in stdout or "Out of host capacity" in stdout:
                 logging.warning("\n⚠ Detected insufficient resource capacity, retrying after backoff time...")
                 time.sleep(initial_wait)
             elif "429" in stdout or "Too Many Requests" in stdout:
+                logging.error(stderr)
                 logging.warning("\n⚠ Detected request limit, retrying after 120 seconds plus backoff time...")
                 time.sleep(120 + initial_wait)
                 initial_wait = min(max_wait, initial_wait * backoff_factor)  # Increase wait time
             else:
+                logging.error(stderr)
                 logging.error("\n✗ Terraform apply failed, unknown error, terminating script")
                 sys.exit(1)
 
