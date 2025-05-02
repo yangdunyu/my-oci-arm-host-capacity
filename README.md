@@ -31,7 +31,7 @@ The overall process is simple and consists of just three steps:
 
 1. Clone this repository to your machine:
    ```bash
-   git clone https://github.com/yourusername/my-oci-arm-host-capacity.git
+   git clone https://github.com/yangdunyu/my-oci-arm-host-capacity.git
    cd my-oci-host-capcity
    ```
 
@@ -139,7 +139,7 @@ Set the `ssh_authorized_keys` value in your terraform.tfvars file to this string
 - Possible values are 1/6, 2/12, 3/18 and 4/24, respectively.
 - Note that the "Oracle Linux Cloud Developer" image can be created with at least 8GB of RAM (memory_in_gbs).
 
-If for some reason your home region is running out of Always Free ARM capacity (total 4 OCPU + 24GB RAM), the script will report an error and exit.
+If you exceed the Always Free ARM capacity (a total of 4 OCPUs and 24 GB of RAM), the script will report an error and exit.
 
 ## Test Outcome
 The Python script performs efficiently on **Windows 10 and later versions**, as well as on **Ubuntu 20.04 and newer**. It is compatible with **Terraform version 1.11.4** and **OCI Provider version 6.35.0**.
